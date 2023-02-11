@@ -8,10 +8,10 @@ const Batch = require('../../models/Batches');
 router.get('/', async (req, res) => {
     try {
         const batches = await Batch.find();
-        res.send(batches);
+        res.status(200).json({ status: 'OK', data: batches })
     }
     catch (error) {
-        res.status(500).json({ message: error.message })
+        res.status(500).json({ status: 'Error', message: error.message })
     }
 });
 
@@ -19,39 +19,61 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const batch = await Batch.findById(req.params.id);
-        res.send(batch);
+        res.status(200).json({ status: 'OK', data: batch })
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ status: 'Error', message: error.message })
     }
 });
 
 //Add Batch
 router.post('/', async (req, res) => {
-    const data = new Batch({
-        batchCode: req.body.batchCode,
-        batchName: req.body.batchName
-    });
+    let result = Batch.find({ batchName: req.body.batchName }, async (err, data) => {
+        if (data.length > 0) {
+            res.status(200).json({ status: 'Error', "message": "Batch Name is already in use!" });
+        }
+        else {
+            const data = new Batch({
+                batchCode: req.body.batchCode,
+                batchName: req.body.batchName
+            });
 
-    try {
-        const dataToSave = await data.save();
-        res.status(200).json(dataToSave);
-    }
-    catch (error) {
-        res.status(400).json({ message: error.message });
-    }
+            try {
+                const dataToSave = await data.save();
+                res.status(200).json({ status: 'OK', data: dataToSave })
+            }
+            catch (error) {
+                res.status(500).json({ status: 'Error', message: error.message })
+            }
+        }
+    });
 });
 
 //Edit Batch
 router.put('/', async (req, res) => {
-    try {
+      try {
+        // const isOk = true;
+        // let result = Batch.find({ batchName: req.body.batchName }, async (err, data) => {
+        //     if (data.length > 0) {
+        //         if (data._id != req.body._id) {
+        //             isOk = false;
+        //             res.status(200).json({ status: 'Error', "message": "Batch Name is already in use!" });
+        //         }
+        //     }
+        //     if (isOk) {
+        //         const id = req.body._id;
+        //         const data = req.body;
+        //         const result = await Batch.updateOne({ "_id": id }, data);
+        //         res.status(200).json({ status: 'OK', data: result })
+        //     }
+        // })
         const id = req.body._id;
-        const data = req.body;
-        const result = await Batch.updateOne({ "_id": id }, data);
-        res.send(result);
+            const data = req.body;
+            const result = await Batch.updateOne({ "_id": id }, data);
+            res.status(200).json({ status: 'OK', data: result })
     }
-    catch (err) {
-        res.status(400).json({ message: err.message });
+    catch (error) {
+        res.status(500).json({ status: 'Error', message: error.message })
     }
 });
 
@@ -61,10 +83,10 @@ router.delete('/:id', async (req, res) => {
         const id = req.params.id;
         const data = req.body;
         const result = await Batch.findOneAndDelete({ "_id": id }, data);
-        res.send(result);
+        res.status(200).json({ status: 'OK', data: result })
     }
-    catch (err) {
-        res.status(400).json({ message: err.message });
+    catch (error) {
+        res.status(500).json({ status: 'Error', message: error.message })
     }
 });
 

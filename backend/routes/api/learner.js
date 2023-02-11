@@ -8,7 +8,6 @@ const Learner = require('../../models/Learners');
 router.get('/', async (req, res) => {
     try {
         const learners = await Learner.find();
-        //res.send(learners);
         res.status(200).json({ status: 'OK', data: learners })
     }
     catch (error) {
@@ -20,7 +19,6 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const learner = await Learner.findById(req.params.id);
-        //res.send(learner);
         res.status(200).json({ status: 'OK', data: learner });
     }
     catch (error) {
@@ -46,7 +44,6 @@ router.post('/', async (req, res) => {
             });
             try {
                 const dataToSave = await data.save();
-                //res.status(200).json(dataToSave);
                 res.status(200).json({ status: 'OK', data: dataToSave });
             }
             catch (error) {
@@ -62,7 +59,6 @@ router.put('/', async (req, res) => {
         const id = req.body._id;
         const data = req.body;
         const result = await Learner.updateOne({ "_id": id }, data);
-        //res.send(result);
         res.status(200).json({ status: 'OK', data: result });
     }
     catch (error) {
@@ -78,7 +74,6 @@ router.put('/placementstatus', async (req, res) => {
         const result = await Learner.updateOne(
             { "_id": id },
             { $set: { "placementStatus": pstatus } });
-        //res.send(result);
         res.status(200).json({ status: 'OK', data: result });
     }
     catch (error) {
@@ -92,7 +87,6 @@ router.delete('/:id', async (req, res) => {
         const id = req.params.id;
         const data = req.body;
         const result = await Learner.findOneAndDelete({ "_id": id }, data);
-        //res.send(result);
         res.status(200).json({ status: 'OK', data: result });
     }
     catch (error) {

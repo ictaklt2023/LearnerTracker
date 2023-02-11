@@ -8,10 +8,10 @@ const Project = require('../../models/Projects');
 router.get('/', async (req, res) => {
     try {
         const projects = await Project.find();
-        res.send(projects);
+        res.status(200).json({ status: 'OK', data: projects });
     }
     catch (error) {
-        res.status(500).json({ message: error.message })
+        res.status(500).json({ status: 'Error', message: error.message });
     }
 });
 
@@ -19,27 +19,34 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const project = await Project.findById(req.params.id);
-        res.send(project);
+        res.status(200).json({ status: 'OK', data: project });
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ status: 'Error', message: error.message });
     }
 });
 
 //Add Project
 router.post('/', async (req, res) => {
-    const data = new Project({
-        projectCode: req.body.projectCode,
-        projectName: req.body.projectName
-    });
+    let result = Project.find({ projectName: req.body.projectName }, async (err, data) => {
+        if (data.length > 0) {
+            res.status(200).json({ status: 'Error', "message": "Project Name is already in use!" });
+        }
+        else {
+            const data = new Project({
+                projectCode: req.body.projectCode,
+                projectName: req.body.projectName
+            });
 
-    try {
-        const dataToSave = await data.save();
-        res.status(200).json(dataToSave);
-    }
-    catch (error) {
-        res.status(400).json({ message: error.message });
-    }
+            try {
+                const dataToSave = await data.save();
+                res.status(200).json({ status: 'OK', data: dataToSave });
+            }
+            catch (error) {
+                res.status(500).json({ status: 'Error', message: error.message });
+            }
+        }
+    });
 });
 
 //Edit Project
@@ -48,10 +55,10 @@ router.put('/', async (req, res) => {
         const id = req.body._id;
         const data = req.body;
         const result = await Project.updateOne({ "_id": id }, data);
-        res.send(result);
+        res.status(200).json({ status: 'OK', data: result });
     }
-    catch (err) {
-        res.status(400).json({ message: err.message });
+    catch (error) {
+        res.status(500).json({ status: 'Error', message: error.message });
     }
 });
 
@@ -61,10 +68,10 @@ router.delete('/:id', async (req, res) => {
         const id = req.params.id;
         const data = req.body;
         const result = await Project.findOneAndDelete({ "_id": id }, data);
-        res.send(result);
+        res.status(200).json({ status: 'OK', data: result });
     }
-    catch (err) {
-        res.status(400).json({ message: err.message });
+    catch (error) {
+        res.status(500).json({ status: 'Error', message: error.message });
     }
 });
 

@@ -7,30 +7,35 @@ const User = require('../../models/Users');
 router.post('/login', async (req, res) => {
     var username = req.body.username;
     var password = req.body.password;
+    try {
     let result = User.find({ username: username }, (err, data) => {
         if (data.length > 0) {
             const passwodValidator = bcrypt.compareSync(password, data[0].password);
             if (passwodValidator) {
-                res.json({ "status": "OK", "data": data });
+                res.status(200).json({ status: 'OK', data: data });
             }
             else {
-                res.json({ "status": "Error", "message": "Invalid password" });
+                res.status(200).json({ status: 'Error',  "message": "Invalid Password" });
             }
         }
         else {
-            res.json({ "status": "Error", "message": "Invalid user" });
+            res.status(200).json({ status: 'Error',  "message": "Invalid Username" });
         }
     })
+}
+catch (error) {
+    res.status(500).json({ status: 'Error', message: error.message });
+}
 });
 
 //View All Users
 router.get('/', async (req, res) => {
     try {
         const users = await User.find();
-        res.send(users);
+        res.status(200).json({ status: 'OK', data: users });
     }
     catch (error) {
-        res.status(500).json({ message: error.message })
+        res.status(500).json({ status: 'Error', message: error.message });
     }
 });
 
@@ -38,10 +43,10 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
-        res.send(user);
+        res.status(200).json({ status: 'OK', data: user });
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ status: 'Error', message: error.message });
     }
 });
 
@@ -50,7 +55,7 @@ router.post('/', async (req, res) => {
     let result = User.find({ username: req.body.username }, async(err, data) => {
         console.log('data='+data);
         if (data.length > 0) {
-            res.status(400).json({ message: "Username is already in use!" });
+            res.status(200).json({ status: 'Error',  "message": "Username is already in use!" });
         }
         else
         {
@@ -62,10 +67,10 @@ router.post('/', async (req, res) => {
         
             try {
                 const dataToSave = await data.save();
-                res.status(200).json(dataToSave);
+                res.status(200).json({ status: 'OK', data: dataToSave });
             }
             catch (error) {
-                res.status(400).json({ message: error.message });
+                res.status(500).json({ status: 'Error', message: error.message });
             }
         }
     });
@@ -83,10 +88,40 @@ router.put('/', async (req, res) => {
             usertype:req.body.usertype 
         });
         const result = await User.updateOne({ "_id": id }, data);
-        res.send(result);
+        res.status(200).json({ status: 'OK', data: result });
     }
     catch (err) {
-        res.status(400).json({ message: err.message });
+        res.status(500).json({ status: 'Error', message: error.message });
+    }
+});
+
+//Update User Type
+router.put('/usertype', async (req, res) => {
+    try {
+        const id = req.body._id;
+        const usrtype = req.body.usertype;
+        const result = await User.updateOne(
+            { "_id": id },
+            { $set: { "usertype": usrtype } });
+        res.status(200).json({ status: 'OK', data: result });
+    }
+    catch (error) {
+        res.status(500).json({ status: 'Error', message: error.message });
+    }
+});
+
+//Update Password
+router.put('/password', async (req, res) => {
+    try {
+        const id = req.body._id;
+        const pword = bcrypt.hashSync(req.body.password, 10);
+        const result = await User.updateOne(
+            { "_id": id },
+            { $set: { "password": pword } });
+        res.status(200).json({ status: 'OK', data: result });
+    }
+    catch (error) {
+        res.status(500).json({ status: 'Error', message: error.message });
     }
 });
 
@@ -96,10 +131,10 @@ router.delete('/:id', async (req, res) => {
         const id = req.params.id;
         const data = req.body;
         const result = await User.findOneAndDelete({ "_id": id }, data);
-        res.send(result);
+        res.status(200).json({ status: 'OK', data: result });
     }
     catch (err) {
-        res.status(400).json({ message: err.message });
+        res.status(500).json({ status: 'Error', message: error.message });
     }
 });
 

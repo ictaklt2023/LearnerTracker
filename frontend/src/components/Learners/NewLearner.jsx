@@ -50,6 +50,7 @@ const NewLearner = () => {
     const [batch, setBatch] = useState('');
     const [courseStatus, setCourseStatus] = useState('');
     const [placementStatus, setPlacementStatus] = useState('');
+    const [theadvisible, setTheadVisible] = useState(true);
 
     useEffect(() => {
         let usr = sessionStorage.getItem("username");
@@ -58,22 +59,27 @@ const NewLearner = () => {
         }
         else
         {
+          let usrtype = sessionStorage.getItem("usertype");
+          if(usrtype==='Training Head')
+          {
+            setTheadVisible(false)
+          }
             axios.get('http://localhost:8062/api/course')
             .then((getCourses) => {
-                setCourseItems(getCourses.data);
-              console.log(getCourses.data)
+                setCourseItems(getCourses.data.data);
+              console.log(getCourses.data.data)
             })
 
             axios.get('http://localhost:8062/api/project')
             .then((getProjects) => {
-              setProjectItems(getProjects.data);
-              console.log(getProjects.data)
+              setProjectItems(getProjects.data.data);
+              console.log(getProjects.data.data)
             })
 
             axios.get('http://localhost:8062/api/batch')
             .then((getBatches) => {
-                setBatchItems(getBatches.data);
-              console.log(getBatches.data)
+                setBatchItems(getBatches.data.data);
+              console.log(getBatches.data.data)
             })
         }
       }, [])
@@ -176,10 +182,12 @@ isOk=false;
             <Dropdown placeholder='Select Course Status' fluid selection options={courseStatusOptions} value={courseStatus} onChange={(e, data) => setCourseStatus(data.value)} />
           </Form.Field>
 
-          <Form.Field>
+          {theadvisible && <> <Form.Field>
             <label>Placement Status</label>
             <Dropdown placeholder='Select Placement Status' fluid selection options={placementStatusOptions} value={placementStatus} onChange={(e, data) => setPlacementStatus(data.value)} />
-          </Form.Field>
+          </Form.Field></>}
+
+         
 
           <Button size='mini' color='grey' type='submit' onClick={sendDataToAPI}>Submit</Button>
         

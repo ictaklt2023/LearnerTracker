@@ -7,8 +7,14 @@ import axios from 'axios';
 
 const Learner = () => {
     const [apiData, setApiData] = useState([]);
+    const [placementVisible, setPlacementVisible] = useState(false);
 
     useEffect(() => {
+      let usrtype = sessionStorage.getItem("usertype");
+          if(usrtype==='Placement Officer')
+          {
+            setPlacementVisible(true)
+          }
         axios.get('http://localhost:8062/api/learner')
           .then((getData) => {
             console.log(JSON.stringify(getData));
@@ -35,6 +41,7 @@ const Learner = () => {
         localStorage.setItem('placementStatus', placementStatus);
       }
 
+        //To Reload data after delete
       const getData = () => {
         axios.get('http://localhost:8062/api/learner')
           .then((getData) => {
@@ -49,10 +56,6 @@ const Learner = () => {
             getData();
           })
       }
-    
-    //   const getUserName = () => {
-    //     return sessionStorage.getItem("username");
-    //   }
 
   return (
     <>
@@ -68,9 +71,9 @@ const Learner = () => {
               </Header.Content>
             </Header>
 <Segment>
-      <Button size='mini' color='grey'>
+      {!placementVisible && <><Button size='mini' color='grey'>
         <Link to='/newlearner' style={{ color: '#FFF' }}>Add New</Link>
-      </Button>
+      </Button></>}
       <Table celled>
         <Table.Header>
           <Table.Row>
@@ -82,7 +85,7 @@ const Learner = () => {
             <Table.HeaderCell>Course Status</Table.HeaderCell>
             <Table.HeaderCell>Placement Status</Table.HeaderCell>
             <Table.HeaderCell></Table.HeaderCell>
-            <Table.HeaderCell></Table.HeaderCell>
+            {!placementVisible && <><Table.HeaderCell></Table.HeaderCell></>}
           </Table.Row>
         </Table.Header>
 
@@ -97,14 +100,22 @@ const Learner = () => {
                 <Table.Cell>{data.batch}</Table.Cell>
                 <Table.Cell>{data.courseStatus}</Table.Cell>
                 <Table.Cell>{data.placementStatus}</Table.Cell>
-                <Table.Cell>
+
+                {!placementVisible && <><Table.Cell>
                   <Link to='/editlearner'>
                     <Button size='mini' color='green' onClick={() => setData(data._id, data.learnerId, data.learnerName, data.courseName, data.project, data.batch, data.courseStatus, data.placementStatus)}>Edit</Button>
                   </Link> 
-                </Table.Cell>
-                <Table.Cell>
+                </Table.Cell></>}
+
+                {placementVisible &&<Table.Cell>
+                  <Link to='/updateplacement'>
+                    <Button size='mini' color='green' onClick={() => setData(data._id, data.learnerId, data.learnerName, data.courseName, data.project, data.batch, data.courseStatus, data.placementStatus)}>Update Placement</Button>
+                  </Link> 
+                </Table.Cell>}
+
+                {!placementVisible && <><Table.Cell>
                   <Button size='mini' color='red' onClick={() => onDelete(data._id)}>Delete</Button>
-                </Table.Cell>
+                </Table.Cell></>}
               </Table.Row>
             )
           })}

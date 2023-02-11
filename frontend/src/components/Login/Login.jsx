@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Icon, Label, Menu, Table, Button, Segment, Container, Form, TextArea, Dropdown, Grid, Header } from 'semantic-ui-react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
+import './Login.css'
 
 const Login = () => {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ const Login = () => {
         if (getData.data.status === 'OK') {
           sessionStorage.setItem("username", getData.data.data[0].username);
           sessionStorage.setItem("usertype", getData.data.data[0].usertype);
-          navigate('/course');
+          navigate('/dashboard');
         }
         else if (getData.data.status === 'Error')
         {
@@ -41,7 +42,7 @@ const Login = () => {
     <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
       <Grid.Column style={{ maxWidth: 450 }}>
         <Header as='h2' color='teal' textAlign='center'>
-          <div className="p-3 mb-2 bg-light text-secondary"><b>Learner Tracker Login</b></div>
+          <div className="logo"><b>Learner Tracker Login</b></div>
         </Header>
         <Form size='large'>
           <Segment stacked>
@@ -54,7 +55,7 @@ const Login = () => {
               type='password' name='password' onChange={(e) => setPassword(e.target.value)}
             />
 
-            <Button color='teal' fluid size='large' type='submit' onClick={LoginValidate}>
+            <Button color='grey' fluid size='large' type='submit' onClick={LoginValidate}>
               Login
             </Button>
           </Segment>

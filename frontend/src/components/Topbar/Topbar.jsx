@@ -7,10 +7,10 @@ const Topbar = () => {
   const navigate = useNavigate();
 
   const getUserName = () => {
+   
     let usr = sessionStorage.getItem("username");
-
     if (usr == null) {
-      return '';
+      navigate('/');
     }
     else {
       let usrtype = sessionStorage.getItem("usertype");

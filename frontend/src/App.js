@@ -10,6 +10,17 @@ import Learner from './components/Learners/Learner';
 import NewLearner from './components/Learners/NewLearner';
 import LearnerDashboard from './components/Dashboard/LearnerDashboard';
 import EditLearner from './components/Learners/EditLearner';
+import User from './components/User/User';
+import NewUser from './components/User/NewUser';
+import EditUser from './components/User/EditUser';
+import Project from './components/Project/Project';
+import NewProject from './components/Project/NewProject';
+import EditProject from './components/Project/EditProject';
+import ChangePassword from './components/User/ChangePassword';
+import Batch from './components/Batch/Batch';
+import NewBatch from './components/Batch/NewBatch';
+import EditBatch from './components/Batch/EditBatch';
+import UpdatePlacement from './components/Learners/UpdatePlacement';
 
 function App() {
   return (
@@ -24,6 +35,21 @@ function App() {
        <Route path="/learner" element={<Learner/>} />
        <Route path="/newlearner" element={<NewLearner/>} />
        <Route path="/editlearner" element={<EditLearner/>} />
+       <Route path="/updateplacement" element={<UpdatePlacement/>} />
+
+       <Route path="/user" element={<User/>} />
+       <Route path="/newuser" element={<NewUser/>} />
+       <Route path="/edituser" element={<EditUser/>} />
+       <Route path="/changepassword" element={<ChangePassword/>} />
+
+       <Route path="/project" element={<Project/>} />
+       <Route path="/newproject" element={<NewProject/>} />
+       <Route path="/editproject" element={<EditProject/>} />
+
+       <Route path="/batch" element={<Batch/>} />
+       <Route path="/newbatch" element={<NewBatch/>} />
+       <Route path="/editbatch" element={<EditBatch/>} />
+
      </Routes>
      </Router>
 

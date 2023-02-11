@@ -6,20 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Sidebar from '../Sidebar/Sidebar';
 import Topbar from '../Topbar/Topbar'
 
-const courseStatusOptions = [
-    {
-      key: 'Qualified',
-      text: 'Qualified',
-      value: 'Qualified'
-    },
-    {
-      key: 'Incompetent',
-      text: 'Incompetent',
-      value: 'Incompetent'
-    }
-  ]
-  
-  const placementStatusOptions = [
+const placementStatusOptions = [
     {
       key: 'Job Seeking',
       text: 'Job Seeking',
@@ -37,7 +24,7 @@ const courseStatusOptions = [
     }
   ]
 
-const EditLearner = () => {
+const UpdatePlacement = () => {
     const navigate = useNavigate();
     const [courseItems, setCourseItems] = useState([]);
     const [projectItems, setProjectItems] = useState([]);
@@ -115,17 +102,11 @@ isOk=false;
         {
         const LearnersData = {
             "_id": ID,
-          "learnerId": learnerId,
-          "learnerName": learnerName,
-          "courseName": courseName,
-          "project": project,
-          "batch": batch,
-          "courseStatus": courseStatus,
           "placementStatus": placementStatus
         };
         console.log('courseName='+courseName);
     console.log(JSON.stringify(LearnersData));
-        axios.put('http://localhost:8062/api/learner', LearnersData)
+        axios.put('http://localhost:8062/api/learner/placementstatus', LearnersData)
           .then((getData) => {
             if(getData.data.status==='OK')
             {
@@ -144,68 +125,50 @@ isOk=false;
     }
 
   return (
-    <>
+      <>
     <div>
      <Topbar/>
      <div className="container"> 
   <Sidebar/>
   <div className="place-holder">
 
-     <Header as='h3'>Edit Learner</Header>
+     <Header as='h3'>Update Placement Status</Header>
      <Segment>
        <Form>
          <Form.Field>
            <label>Learner ID</label>
-           <input required name='learnerId' value={learnerId} placeholder='Learner ID' onChange={(e) => setLearnerId(e.target.value)} />
+           <Label>{learnerId}</Label>
          </Form.Field>
 
          <Form.Field>
            <label>Learner Name</label>
-           <input required name='learnerName' value={learnerName} placeholder='Learner Name' onChange={(e) => setLearnerName(e.target.value)} />
+           <Label>{learnerName}</Label>
          </Form.Field>
 
          <Form.Field>
            <label>Course</label>
-           <Dropdown required placeholder='Select Course' fluid selection options={courseItems.map(ds => {
-             return {
-                 key: ds.courseCode,
-                 text: ds.courseName,
-                 value: ds.courseName
-             }
-           })} value={courseName} onChange={(e, data) => setCourseName(data.value)} />
+           <Label>{courseName}</Label>
          </Form.Field>
 
           <Form.Field>
            <label>Project</label>
-           <Dropdown placeholder='Select Project' fluid selection options={projectItems.map(ds => {
-             return {
-                 key: ds.projectCode,
-                 text: ds.projectName,
-                 value: ds.projectName
-             }
-           })} value={project} onChange={(e, data) => setProject(data.value)} />
+           <Label>{project}</Label>
          </Form.Field>
 
          <Form.Field>
            <label>Batch</label>
-           <Dropdown placeholder='Select Batch' fluid selection options={batchItems.map(ds => {
-             return {
-                 key: ds.batchCode,
-                 text: ds.batchName,
-                 value: ds.batchName
-             }
-           })} value={batch} onChange={(e, data) => setBatch(data.value)} />
+           <Label>{batch}</Label>
          </Form.Field>
 
          <Form.Field>
            <label>Course Status</label>
-           <Dropdown placeholder='Select Course Status' fluid selection options={courseStatusOptions} value={courseStatus} onChange={(e, data) => setCourseStatus(data.value)} />
+           <Label>{courseStatus}</Label>
          </Form.Field>
 
-         {theadvisible && <>  <Form.Field>
+        <Form.Field>
            <label>Placement Status</label>
            <Dropdown placeholder='Select Placement Status' fluid selection options={placementStatusOptions} value={placementStatus} onChange={(e, data) => setPlacementStatus(data.value)} />
-         </Form.Field></>}
+         </Form.Field>
         
 
          <Button size='mini' color='grey' type='submit' onClick={sendDataToAPI}>Submit</Button>
@@ -222,4 +185,4 @@ isOk=false;
   )
 }
 
-export default EditLearner
+export default UpdatePlacement

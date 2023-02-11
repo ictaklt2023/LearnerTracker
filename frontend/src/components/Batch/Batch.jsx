@@ -5,43 +5,37 @@ import { Link } from 'react-router-dom'
 import Topbar from '../Topbar/Topbar';
 import Sidebar from '../Sidebar/Sidebar';
 
-const Course = () => {
-  const [apiData, setApiData] = useState([]);
-
-  useEffect(() => {
-    axios.get('http://localhost:8062/api/course')
-      .then((getData) => {
-        setApiData(getData.data.data);
-        console.log(getData.data.data)
-      })
-  }, [])
-
-  const setData = (id, courseCode, courseName) => {
-    localStorage.setItem('ID', id);
-    localStorage.setItem('courseCode', courseCode);
-    localStorage.setItem('courseName', courseName);
-  }
-
-  //To Reload data after delete
-  const getData = () => {
-    axios.get('http://localhost:8062/api/course')
-      .then((getData) => {
-        setApiData(getData.data.data);
-        console.log(getData.data.data);
-      })
-  }
-
-  const onDelete = (id) => {
-    axios.delete(`http://localhost:8062/api/course/${id}`)
-      .then(() => {
-        getData();
-      })
-  }
-
-  const getUserName = () => {
-    return sessionStorage.getItem("username");
-  }
-
+const Batch = () => {
+    const [apiData, setApiData] = useState([]);
+    useEffect(() => {
+        axios.get('http://localhost:8062/api/batch')
+          .then((getData) => {
+            setApiData(getData.data.data);
+            console.log(getData.data.data)
+          })
+      }, [])
+    
+      const setData = (id, batchCode, batchName) => {
+        localStorage.setItem('ID', id);
+        localStorage.setItem('batchCode', batchCode);
+        localStorage.setItem('batchName', batchName);
+      }
+    
+      //To Reload data after delete
+      const getData = () => {
+        axios.get('http://localhost:8062/api/batch')
+          .then((getData) => {
+            setApiData(getData.data.data);
+            console.log(getData.data.data);
+          })
+      }
+    
+      const onDelete = (id) => {
+        axios.delete(`http://localhost:8062/api/batch/${id}`)
+          .then(() => {
+            getData();
+          })
+      }
 
   return (
     <>
@@ -54,8 +48,8 @@ const Course = () => {
             <Header as='h3'>
               <Icon name='settings' />
               <Header.Content>
-                Course Settings
-                <Header.Subheader>Manage your Courses</Header.Subheader>
+                Batch Settings
+                <Header.Subheader>Manage your Batches</Header.Subheader>
               </Header.Content>
             </Header>
 
@@ -66,8 +60,8 @@ const Course = () => {
               <Table celled>
                 <Table.Header>
                   <Table.Row>
-                    <Table.HeaderCell>Course Code</Table.HeaderCell>
-                    <Table.HeaderCell>Course Name</Table.HeaderCell>
+                    <Table.HeaderCell>Batch Code</Table.HeaderCell>
+                    <Table.HeaderCell>Batch Name</Table.HeaderCell>
                     <Table.HeaderCell></Table.HeaderCell>
                     <Table.HeaderCell></Table.HeaderCell>
                   </Table.Row>
@@ -77,11 +71,11 @@ const Course = () => {
                   {apiData.map((data) => {
                     return (
                       <Table.Row>
-                        <Table.Cell>{data.courseCode}</Table.Cell>
-                        <Table.Cell>{data.courseName}</Table.Cell>
+                        <Table.Cell>{data.batchCode}</Table.Cell>
+                        <Table.Cell>{data.batchName}</Table.Cell>
                         <Table.Cell>
-                          <Link to='/editcourse'>
-                            <Button size='mini' color='green' onClick={() => setData(data._id, data.courseCode, data.courseName)}>Edit</Button>
+                          <Link to='/editbatch'>
+                            <Button size='mini' color='green' onClick={() => setData(data._id, data.batchCode, data.batchName)}>Edit</Button>
                           </Link>
                         </Table.Cell>
                         <Table.Cell>
@@ -100,4 +94,4 @@ const Course = () => {
   )
 }
 
-export default Course
+export default Batch

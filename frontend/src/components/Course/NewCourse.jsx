@@ -25,8 +25,13 @@ const NewCourse = () => {
     };
 
     axios.post('http://localhost:8062/api/course', courseData)
-      .then(() => {
-        navigate('/course');
+      .then((getData) => {
+        if (getData.data.status === 'OK') {
+          navigate('/course');
+        }
+        else if (getData.data.status === 'Error') {
+          alert(getData.data.message)
+        }
       })
   }
 
@@ -43,12 +48,12 @@ const NewCourse = () => {
               <Form>
                 <Form.Field>
                   <label>Course Code</label>
-                  <input name='courcecode' value={courseCode} placeholder='Course Code' onChange={(e) => setCourseCode(e.target.value)} />
+                  <input required name='coursecode' value={courseCode} placeholder='Course Code' onChange={(e) => setCourseCode(e.target.value)} />
                 </Form.Field>
 
                 <Form.Field>
                   <label>Course Name</label>
-                  <input name='courcename' value={courseName} placeholder='Course Name' onChange={(e) => setCourseName(e.target.value)} />
+                  <input required name='coursename' value={courseName} placeholder='Course Name' onChange={(e) => setCourseName(e.target.value)} />
                 </Form.Field>
 
                 <Button size='mini' color='grey' type='submit' onClick={sendDataToAPI}>Submit</Button>

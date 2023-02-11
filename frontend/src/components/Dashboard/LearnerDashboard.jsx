@@ -4,8 +4,10 @@ import { Link } from 'react-router-dom'
 import Sidebar from '../Sidebar/Sidebar';
 import Topbar from '../Topbar/Topbar'
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'
 
 const LearnerDashboard = () => {
+  const navigate = useNavigate();
     const [apiData, setApiData] = useState([]);
     useEffect(() => {
       axios.get('http://localhost:8062/api/learner')
