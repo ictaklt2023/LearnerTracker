@@ -48,12 +48,12 @@ const NewBatch = () => {
               <Form>
                 <Form.Field>
                   <label>Batch Code</label>
-                  <input required name='batchcode' value={batchCode} placeholder='Course Code' onChange={(e) => setBatchCode(e.target.value)} />
+                  <input required name='batchcode' value={batchCode} placeholder='Batch Code' onChange={(e) => setBatchCode(e.target.value)} />
                 </Form.Field>
 
                 <Form.Field>
                   <label>Batch Name</label>
-                  <input required name='batchname' value={batchName} placeholder='Course Name' onChange={(e) => setBatchName(e.target.value)} />
+                  <input required name='batchname' value={batchName} placeholder='Batch Name' onChange={(e) => setBatchName(e.target.value)} />
                 </Form.Field>
 
                 <Button size='mini' color='grey' type='submit' onClick={sendDataToAPI}>Submit</Button>

@@ -55,7 +55,7 @@ const Batch = () => {
 
             <Segment>
               <Button size='mini' color='grey'>
-                <Link to='/newcourse' style={{ color: '#FFF' }}>Add New</Link>
+                <Link to='/newbatch' style={{ color: '#FFF' }}>Add New</Link>
               </Button>
               <Table celled>
                 <Table.Header>
