@@ -8,33 +8,32 @@ import Sidebar from '../Sidebar/Sidebar';
 
 
 const NewBatch = () => {
-    const navigate = useNavigate();
-    const [batchCode, setBatchCode] = useState('');
-    const [batchName, setBatchName] = useState('');
-  
-    useEffect(() => {
-      let usr = sessionStorage.getItem("username");
-      if (usr == null) {
-        navigate('/');
-      }
-    }, [])
-  
-    const sendDataToAPI = () => {
-      const batchData = {
-        "batchCode": batchCode,
-        "batchName": batchName
-      };
-  
-      axios.post('http://localhost:8062/api/batch', batchData)
-        .then((getData) => {
-          if (getData.data.status === 'OK') {
-            navigate('/batch');
-          }
-          else if (getData.data.status === 'Error') {
-            alert(getData.data.message)
-          }
-        })
-    }
+  const navigate = useNavigate();
+  const [batchCode, setBatchCode] = useState('');
+  const [batchName, setBatchName] = useState('');
+  const [token, setToken] = useState(sessionStorage.getItem("usertoken"));
+
+  const sendDataToAPI = () => {
+    const batchData = {
+      "batchCode": batchCode,
+      "batchName": batchName
+    };
+    const headers = {
+      "x-access-token": token
+    };
+
+    axios.post('http://localhost:8062/api/batch', batchData, {
+      headers: headers
+    })
+      .then((getData) => {
+        if (getData.data.status === 'OK') {
+          navigate('/batch');
+        }
+        else if (getData.data.status === 'Error') {
+          alert(getData.data.message)
+        }
+      })
+  }
   return (
     <>
       <div>

@@ -9,8 +9,14 @@ import { useNavigate } from 'react-router-dom'
 const LearnerDashboard = () => {
   const navigate = useNavigate();
     const [apiData, setApiData] = useState([]);
+    const [token, setToken] = useState(sessionStorage.getItem("usertoken"));
     useEffect(() => {
-      axios.get('http://localhost:8062/api/learner')
+      const headers  = {
+        "x-access-token": token
+      }
+      axios.get('http://localhost:8062/api/learner',{
+        headers: headers
+      })
         .then((getData) => {
           console.log(JSON.stringify(getData));
           if(getData.data.status=='OK')

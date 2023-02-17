@@ -10,21 +10,20 @@ const NewCourse = () => {
   const navigate = useNavigate();
   const [courseCode, setCourseCode] = useState('');
   const [courseName, setCourseName] = useState('');
-
-  useEffect(() => {
-    let usr = sessionStorage.getItem("username");
-    if (usr == null) {
-      navigate('/');
-    }
-  }, [])
+  const [token, setToken] = useState(sessionStorage.getItem("usertoken"));
 
   const sendDataToAPI = () => {
     const courseData = {
       "courseCode": courseCode,
       "courseName": courseName
     };
+    const headers  = {
+      "x-access-token": token
+    };
 
-    axios.post('http://localhost:8062/api/course', courseData)
+    axios.post('http://localhost:8062/api/course', courseData,{
+      headers: headers
+    })
       .then((getData) => {
         if (getData.data.status === 'OK') {
           navigate('/course');

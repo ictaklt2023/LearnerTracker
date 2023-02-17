@@ -6,36 +6,44 @@ import Topbar from '../Topbar/Topbar';
 import Sidebar from '../Sidebar/Sidebar';
 
 const Batch = () => {
-    const [apiData, setApiData] = useState([]);
-    useEffect(() => {
-        axios.get('http://localhost:8062/api/batch')
-          .then((getData) => {
-            setApiData(getData.data.data);
-            console.log(getData.data.data)
-          })
-      }, [])
-    
-      const setData = (id, batchCode, batchName) => {
-        localStorage.setItem('ID', id);
-        localStorage.setItem('batchCode', batchCode);
-        localStorage.setItem('batchName', batchName);
-      }
-    
-      //To Reload data after delete
-      const getData = () => {
-        axios.get('http://localhost:8062/api/batch')
-          .then((getData) => {
-            setApiData(getData.data.data);
-            console.log(getData.data.data);
-          })
-      }
-    
-      const onDelete = (id) => {
-        axios.delete(`http://localhost:8062/api/batch/${id}`)
-          .then(() => {
-            getData();
-          })
-      }
+  const [apiData, setApiData] = useState([]);
+  const [token, setToken] = useState(sessionStorage.getItem("usertoken"));
+  useEffect(() => {
+    const headers = {
+      "x-access-token": token
+    }
+    axios.get('http://localhost:8062/api/batch', {
+      headers: headers
+    })
+      .then((getData) => {
+        setApiData(getData.data.data);
+      })
+  }, [])
+
+  //To Reload data after delete
+  const getData = () => {
+    const headers = {
+      "x-access-token": token
+    }
+    axios.get('http://localhost:8062/api/batch', {
+      headers: headers
+    })
+      .then((getData) => {
+        setApiData(getData.data.data);
+      })
+  }
+
+  const onDelete = (id) => {
+    const headers = {
+      "x-access-token": token
+    }
+    axios.delete(`http://localhost:8062/api/batch/${id}`, {
+      headers: headers
+    })
+      .then(() => {
+        getData();
+      })
+  }
 
   return (
     <>
@@ -74,8 +82,8 @@ const Batch = () => {
                         <Table.Cell>{data.batchCode}</Table.Cell>
                         <Table.Cell>{data.batchName}</Table.Cell>
                         <Table.Cell>
-                          <Link to='/editbatch'>
-                            <Button size='mini' color='green' onClick={() => setData(data._id, data.batchCode, data.batchName)}>Edit</Button>
+                          <Link to={`/editbatch/${data._id}`}>
+                            <Button size='mini' color='green'>Edit</Button>
                           </Link>
                         </Table.Cell>
                         <Table.Cell>

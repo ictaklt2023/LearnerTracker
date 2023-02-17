@@ -12,19 +12,11 @@ const Sidebar = () => {
   const [adminvisible, setAdminVisible] = useState(false);
 
   useEffect(() => {
-    let usr = sessionStorage.getItem("username");
-   
-    if (usr == null) {
-      navigate('/');
-    }
-    else
-    {
       let usrtype = sessionStorage.getItem("usertype");
       if(usrtype==='Admin')
       {
         setAdminVisible(true)
       }
-    }
   }, [])
 
   return (

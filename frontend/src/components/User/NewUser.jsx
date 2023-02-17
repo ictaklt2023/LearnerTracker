@@ -29,6 +29,7 @@ const NewUser = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [usertype, setUsertype] = useState('');
+  const [token, setToken] = useState(sessionStorage.getItem("usertoken"));
 
   const sendDataToAPI = () => {
     var isOk=true;
@@ -40,13 +41,19 @@ isOk=false;
 
     if(isOk)
     {
-    const courseData = {
+    const userData = {
       "username": username,
       "password": password,
       "usertype": usertype
     };
 
-    axios.post('http://localhost:8062/api/user', courseData)
+    const headers  = {
+      "x-access-token": token
+    };
+
+    axios.post('http://localhost:8062/api/user', userData,{
+      headers: headers
+    })
       .then((getData) => {
         if(getData.data.status==='OK')
         {
@@ -59,7 +66,6 @@ isOk=false;
       })
       .catch(error =>{
         console.log('catch-err'+error);
-        console.log('catch-err-message'+error.message);
       })
   }
 }

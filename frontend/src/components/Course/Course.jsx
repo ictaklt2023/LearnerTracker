@@ -7,32 +7,41 @@ import Sidebar from '../Sidebar/Sidebar';
 
 const Course = () => {
   const [apiData, setApiData] = useState([]);
+  const [token, setToken] = useState(sessionStorage.getItem("usertoken"));
 
   useEffect(() => {
-    axios.get('http://localhost:8062/api/course')
+    const headers = {
+      "x-access-token": token
+    }
+    axios.get('http://localhost:8062/api/course', {
+      headers: headers
+    })
       .then((getData) => {
         setApiData(getData.data.data);
-        console.log(getData.data.data)
       })
   }, [])
 
-  const setData = (id, courseCode, courseName) => {
-    localStorage.setItem('ID', id);
-    localStorage.setItem('courseCode', courseCode);
-    localStorage.setItem('courseName', courseName);
-  }
 
   //To Reload data after delete
   const getData = () => {
-    axios.get('http://localhost:8062/api/course')
+    const headers = {
+      "x-access-token": token
+    }
+    axios.get('http://localhost:8062/api/course', {
+      headers: headers
+    })
       .then((getData) => {
         setApiData(getData.data.data);
-        console.log(getData.data.data);
       })
   }
 
   const onDelete = (id) => {
-    axios.delete(`http://localhost:8062/api/course/${id}`)
+    const headers = {
+      "x-access-token": token
+    }
+    axios.delete(`http://localhost:8062/api/course/${id}`, {
+      headers: headers
+    })
       .then(() => {
         getData();
       })
@@ -80,8 +89,8 @@ const Course = () => {
                         <Table.Cell>{data.courseCode}</Table.Cell>
                         <Table.Cell>{data.courseName}</Table.Cell>
                         <Table.Cell>
-                          <Link to='/editcourse'>
-                            <Button size='mini' color='green' onClick={() => setData(data._id, data.courseCode, data.courseName)}>Edit</Button>
+                          <Link to={`/editcourse/${data._id}`}>
+                            <Button size='mini' color='green'>Edit</Button>
                           </Link>
                         </Table.Cell>
                         <Table.Cell>

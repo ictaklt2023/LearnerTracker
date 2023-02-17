@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const jwt = require('jsonwebtoken');
+let verifyToken = require('../api/verifytoken');
 
 //Load Batch model
 const Batch = require('../../models/Batches');
 
 //View All Batch
-router.get('/', async (req, res) => {
+router.get('/', verifyToken, async (req, res) => {
     try {
         const batches = await Batch.find();
         res.status(200).json({ status: 'OK', data: batches })
@@ -16,7 +18,7 @@ router.get('/', async (req, res) => {
 });
 
 //View Batch by Id
-router.get('/:id', async (req, res) => {
+router.get('/:id', verifyToken, async (req, res) => {
     try {
         const batch = await Batch.findById(req.params.id);
         res.status(200).json({ status: 'OK', data: batch })
@@ -27,7 +29,7 @@ router.get('/:id', async (req, res) => {
 });
 
 //Add Batch
-router.post('/', async (req, res) => {
+router.post('/', verifyToken, async (req, res) => {
     let result = Batch.find({ batchName: req.body.batchName }, async (err, data) => {
         if (data.length > 0) {
             res.status(200).json({ status: 'Error', "message": "Batch Name is already in use!" });
@@ -50,23 +52,8 @@ router.post('/', async (req, res) => {
 });
 
 //Edit Batch
-router.put('/', async (req, res) => {
+router.put('/', verifyToken, async (req, res) => {
       try {
-        // const isOk = true;
-        // let result = Batch.find({ batchName: req.body.batchName }, async (err, data) => {
-        //     if (data.length > 0) {
-        //         if (data._id != req.body._id) {
-        //             isOk = false;
-        //             res.status(200).json({ status: 'Error', "message": "Batch Name is already in use!" });
-        //         }
-        //     }
-        //     if (isOk) {
-        //         const id = req.body._id;
-        //         const data = req.body;
-        //         const result = await Batch.updateOne({ "_id": id }, data);
-        //         res.status(200).json({ status: 'OK', data: result })
-        //     }
-        // })
         const id = req.body._id;
             const data = req.body;
             const result = await Batch.updateOne({ "_id": id }, data);
@@ -78,7 +65,7 @@ router.put('/', async (req, res) => {
 });
 
 //Delete Batch
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verifyToken, async (req, res) => {
     try {
         const id = req.params.id;
         const data = req.body;

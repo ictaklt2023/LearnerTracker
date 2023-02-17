@@ -1,7 +1,7 @@
 import React,{ useState, useEffect } from 'react'
 import { Icon, Label, Menu, Table, Button, Segment, Container, Form, TextArea, Dropdown, Header } from 'semantic-ui-react'
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate,useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import Topbar from '../Topbar/Topbar';
 import Sidebar from '../Sidebar/Sidebar';
@@ -11,23 +11,38 @@ const ChangePassword = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [usertype, setUsertype] = useState('');
-  const [ID, setID] = useState(null);
+    const { id } = useParams();
+    const [token, setToken] = useState(sessionStorage.getItem("usertoken"));
 
   useEffect(() => {
-      setUsername(localStorage.getItem('username'));
-      setUsertype(localStorage.getItem('usertype'));
-      setID(localStorage.getItem('ID'));
-      console.log('usertype='+usertype);
-      console.log('username='+username);
+    const headers  = {
+      "x-access-token": token
+    };
+    axios
+    .get(`http://localhost:8062/api/user/${id}`,{
+      headers: headers
+    })
+    .then((res) => {
+      setUsername(res.data.data.username);
+      setUsertype(res.data.data.usertype);
+    })
+    .catch((err) => {
+      console.log('Error from Get User Details');
+    });
   }, [])
 
   const sendDataToAPI = () => {
     const userData = {
-        "_id": ID,
+        "_id": id,
        "password": password
     };
+    const headers  = {
+      "x-access-token": token
+    };
 
-    axios.put('http://localhost:8062/api/user/password', userData)
+    axios.put('http://localhost:8062/api/user/password', userData,{
+      headers: headers
+    })
       .then((getData) => {
         if(getData.data.status==='OK')
         {
@@ -40,7 +55,6 @@ const ChangePassword = () => {
       })
       .catch(error =>{
         console.log('catch-err'+error);
-        console.log('catch-err-message'+error.message);
       })
 }
 

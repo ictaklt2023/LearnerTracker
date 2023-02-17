@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
+let verifyToken = require('../api/verifytoken');
 
 //Load Learners model
 const Learner = require('../../models/Learners');
 
 //View All Learners
-router.get('/', async (req, res) => {
+router.get('/', verifyToken, async (req, res) => {
     try {
         const learners = await Learner.find();
         res.status(200).json({ status: 'OK', data: learners })
@@ -16,7 +17,7 @@ router.get('/', async (req, res) => {
 });
 
 //View Learner by Id
-router.get('/:id', async (req, res) => {
+router.get('/:id', verifyToken, async (req, res) => {
     try {
         const learner = await Learner.findById(req.params.id);
         res.status(200).json({ status: 'OK', data: learner });
@@ -27,7 +28,7 @@ router.get('/:id', async (req, res) => {
 });
 
 //Add Learner
-router.post('/', async (req, res) => {
+router.post('/', verifyToken, async (req, res) => {
     let result = Learner.find({ learnerId: req.body.learnerId }, async (err, data) => {
         if (data.length > 0) {
             res.status(200).json({status: 'Error', message: "Learner Id is already in use!" });
@@ -54,7 +55,7 @@ router.post('/', async (req, res) => {
 });
 
 //Edit Learner
-router.put('/', async (req, res) => {
+router.put('/', verifyToken, async (req, res) => {
     try {
         const id = req.body._id;
         const data = req.body;
@@ -67,7 +68,7 @@ router.put('/', async (req, res) => {
 });
 
 //Update Learner's Placement Status
-router.put('/placementstatus', async (req, res) => {
+router.put('/placementstatus', verifyToken, async (req, res) => {
     try {
         const id = req.body._id;
         const pstatus = req.body.placementStatus;
@@ -82,7 +83,7 @@ router.put('/placementstatus', async (req, res) => {
 });
 
 //Delete Course
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verifyToken, async (req, res) => {
     try {
         const id = req.params.id;
         const data = req.body;

@@ -29,26 +29,28 @@ function App() {
      <Routes>
        <Route path="/" element={<Login/>} />
        <Route path="/dashboard" element={<LearnerDashboard/>} />
+
        <Route path="/course" element={<Course/>} />
        <Route path="/newcourse" element={<NewCourse/>} />
-       <Route path="/editcourse" element={<EditCourse/>} />
+       <Route path="/editcourse/:id" element={<EditCourse/>} />
+
        <Route path="/learner" element={<Learner/>} />
        <Route path="/newlearner" element={<NewLearner/>} />
-       <Route path="/editlearner" element={<EditLearner/>} />
-       <Route path="/updateplacement" element={<UpdatePlacement/>} />
+       <Route path="/editlearner/:id" element={<EditLearner/>} />
+       <Route path="/updateplacement/:id" element={<UpdatePlacement/>} />
 
        <Route path="/user" element={<User/>} />
        <Route path="/newuser" element={<NewUser/>} />
-       <Route path="/edituser" element={<EditUser/>} />
-       <Route path="/changepassword" element={<ChangePassword/>} />
+       <Route path="/edituser/:id" element={<EditUser/>} />
+       <Route path="/changepassword/:id" element={<ChangePassword/>} />
 
        <Route path="/project" element={<Project/>} />
        <Route path="/newproject" element={<NewProject/>} />
-       <Route path="/editproject" element={<EditProject/>} />
+       <Route path="/editproject/:id" element={<EditProject/>} />
 
        <Route path="/batch" element={<Batch/>} />
        <Route path="/newbatch" element={<NewBatch/>} />
-       <Route path="/editbatch" element={<EditBatch/>} />
+       <Route path="/editbatch/:id" element={<EditBatch/>} />
 
      </Routes>
      </Router>

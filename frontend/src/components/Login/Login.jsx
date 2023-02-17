@@ -17,21 +17,15 @@ const Login = () => {
       "username": username,
       "password": password
     }
-    console.log('username=' + userData.username);
-    console.log('password=' + userData.password);
     axios.post('http://localhost:8062/api/user/login', userData)
       .then((getData) => {
-        console.log('getData=' + JSON.stringify(getData));
-        console.log('getData.data=' + JSON.stringify(getData.data));
-        console.log('getData.data.status=' + JSON.stringify(getData.data.status));
-        console.log('data=' + JSON.stringify(getData.data.data));
         if (getData.data.status === 'OK') {
           sessionStorage.setItem("username", getData.data.data[0].username);
           sessionStorage.setItem("usertype", getData.data.data[0].usertype);
+          sessionStorage.setItem("usertoken", getData.data.token);
           navigate('/dashboard');
         }
-        else if (getData.data.status === 'Error')
-        {
+        else if (getData.data.status === 'Error') {
           alert(getData.data.message);
         }
       }

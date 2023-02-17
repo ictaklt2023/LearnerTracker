@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Icon, Label, Menu, Table, Button, Segment, Container, Form, TextArea, Dropdown, Header } from 'semantic-ui-react'
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import Topbar from '../Topbar/Topbar';
 import Sidebar from '../Sidebar/Sidebar';
@@ -10,28 +10,40 @@ const EditCourse = () => {
   const navigate = useNavigate();
   const [courseCode, setCourseCode] = useState('');
   const [courseName, setCourseName] = useState('');
-  const [ID, setID] = useState(null);
+  const [token, setToken] = useState(sessionStorage.getItem("usertoken"));
+
+  const { id } = useParams();
 
   useEffect(() => {
-    let usr = sessionStorage.getItem("username");
-    if (usr == null) {
-      navigate('/');
+    const headers = {
+      "x-access-token": token
     }
-    else {
-      setCourseCode(localStorage.getItem('courseCode'));
-      setCourseName(localStorage.getItem('courseName'));
-      setID(localStorage.getItem('ID'));
-    }
-  }, [])
+    axios
+      .get(`http://localhost:8062/api/course/${id}`, {
+        headers: headers
+      })
+      .then((res) => {
+        setCourseCode(res.data.data.courseCode);
+        setCourseName(res.data.data.courseName);
+      })
+      .catch((err) => {
+        console.log('Error from Get Course Details');
+      });
+  }, []);
 
   const sendDataToAPI = () => {
     const courseData = {
-      "_id": ID,
+      "_id": id,
       "courseCode": courseCode,
       "courseName": courseName
     };
+    const headers = {
+      "x-access-token": token
+    };
 
-    axios.put('http://localhost:8062/api/course', courseData)
+    axios.put('http://localhost:8062/api/course', courseData, {
+      headers: headers
+    })
       .then(() => {
         navigate('/course');
       })

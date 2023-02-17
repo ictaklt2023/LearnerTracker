@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
+let verifyToken = require('../api/verifytoken');
 
 //Load Project model
 const Project = require('../../models/Projects');
 
 //View All Project
-router.get('/', async (req, res) => {
+router.get('/', verifyToken, async (req, res) => {
     try {
         const projects = await Project.find();
         res.status(200).json({ status: 'OK', data: projects });
@@ -16,7 +17,7 @@ router.get('/', async (req, res) => {
 });
 
 //View Project by Id
-router.get('/:id', async (req, res) => {
+router.get('/:id', verifyToken, async (req, res) => {
     try {
         const project = await Project.findById(req.params.id);
         res.status(200).json({ status: 'OK', data: project });
@@ -27,7 +28,7 @@ router.get('/:id', async (req, res) => {
 });
 
 //Add Project
-router.post('/', async (req, res) => {
+router.post('/', verifyToken, async (req, res) => {
     let result = Project.find({ projectName: req.body.projectName }, async (err, data) => {
         if (data.length > 0) {
             res.status(200).json({ status: 'Error', "message": "Project Name is already in use!" });
@@ -50,7 +51,7 @@ router.post('/', async (req, res) => {
 });
 
 //Edit Project
-router.put('/', async (req, res) => {
+router.put('/', verifyToken, async (req, res) => {
     try {
         const id = req.body._id;
         const data = req.body;
@@ -63,7 +64,7 @@ router.put('/', async (req, res) => {
 });
 
 //Delete Project
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verifyToken, async (req, res) => {
     try {
         const id = req.params.id;
         const data = req.body;
