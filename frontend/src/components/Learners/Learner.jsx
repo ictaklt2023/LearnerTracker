@@ -74,6 +74,9 @@ const Learner = () => {
             {!placementVisible && <><Button size='mini' color='grey'>
               <Link to='/newlearner' style={{ color: '#FFF' }}>Add New</Link>
             </Button></>}
+            {!placementVisible && <><Button size='mini' color='grey'>
+              <Link to='/bulkupload' style={{ color: '#FFF' }}>CSV Upload</Link>
+            </Button></>}
             <Table celled>
               <Table.Header>
                 <Table.Row>

@@ -2,11 +2,11 @@ const mongoose =require('mongoose');
 const LearnersSchema =new mongoose.Schema({
    learnerId:{
         type:String,
-        required:true
+        //required:true
     },
     learnerName:{
         type:String,
-        required:true
+        //required:true
     },
     // roles: [
     //     {
@@ -16,19 +16,19 @@ const LearnersSchema =new mongoose.Schema({
     //   ],
     courseName:{
         type:String,
-        required:true
+        //required:true
     },
     project:{
         type:String,
-        required:true
+        //required:true
     },
     batch:{
         type:String,
-        required:true
+        //required:true
     },
     courseStatus:{
         type:String,
-        required:true
+        //required:true
     },
     placementStatus:{
         type:String

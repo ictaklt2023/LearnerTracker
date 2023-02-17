@@ -21,6 +21,7 @@ import Batch from './components/Batch/Batch';
 import NewBatch from './components/Batch/NewBatch';
 import EditBatch from './components/Batch/EditBatch';
 import UpdatePlacement from './components/Learners/UpdatePlacement';
+import BulkUpload from './components/Learners/BulkUpload';
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
        <Route path="/newlearner" element={<NewLearner/>} />
        <Route path="/editlearner/:id" element={<EditLearner/>} />
        <Route path="/updateplacement/:id" element={<UpdatePlacement/>} />
+       <Route path="/bulkupload" element={<BulkUpload/>} />
 
        <Route path="/user" element={<User/>} />
        <Route path="/newuser" element={<NewUser/>} />

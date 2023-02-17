@@ -31,7 +31,7 @@ router.get('/:id', verifyToken, async (req, res) => {
 router.post('/', verifyToken, async (req, res) => {
     let result = Learner.find({ learnerId: req.body.learnerId }, async (err, data) => {
         if (data.length > 0) {
-            res.status(200).json({status: 'Error', message: "Learner Id is already in use!" });
+            res.status(200).json({ status: 'Error', message: "Learner Id is already in use!" });
         }
         else {
             const data = new Learner({
@@ -53,6 +53,34 @@ router.post('/', verifyToken, async (req, res) => {
         }
     });
 });
+
+//Bulk Upload Learner
+router.post('/bulkupload', async (req, res) => {
+    try {
+        //console.log('req.body='+req.body);
+        //const jData = jsonObj(req.body);
+        console.log('req.body.length=' + req.body.length);
+        var learnersSuccess = [];
+        var learnersError = [];
+var isOk=true;
+        for (var i = 0; i < req.body.length; i++) {
+            let result = Learner.find({ learnerId: req.body[i]['learnerId'] }, (err, data) => {
+                if (data.length > 0) {
+                    isOk=false;
+                    return res.status(200).json({ status: 'Failed', "Message": "LearnerId duplication found, Upload failed!"});
+                }
+            })   
+        }
+
+    
+        const dataToSave = await Learner.insertMany(req.body);
+            res.status(200).json({ status: 'OK', "Message": "Records Inserted Successfully!" });
+    }
+    catch (error) {
+        res.status(500).json({ status: 'Error', message: error.message });
+    }
+});
+
 
 //Edit Learner
 router.put('/', verifyToken, async (req, res) => {
