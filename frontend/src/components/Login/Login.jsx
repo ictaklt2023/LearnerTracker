@@ -38,20 +38,19 @@ const Login = () => {
         <Header as='h2' color='teal' textAlign='center'>
           <div className="logo"><b>Learner Tracker Login</b></div>
         </Header>
-        <Form size='large'>
+        <Form size='large' onSubmit={LoginValidate}>
           <Segment stacked>
-            <Form.Input fluid icon='user' iconPosition='left' placeholder='User Name' name='username' onChange={(e) => setUsername(e.target.value)} />
+            <Form.Input required fluid icon='user' iconPosition='left' placeholder='User Name' name='username' onChange={(e) => setUsername(e.target.value)} 
+           />
             <Form.Input
+            required
               fluid
               icon='lock'
               iconPosition='left'
               placeholder='Password'
               type='password' name='password' onChange={(e) => setPassword(e.target.value)}
             />
-
-            <Button color='grey' fluid size='large' type='submit' onClick={LoginValidate}>
-              Login
-            </Button>
+             <Button color="grey" fluid size='large'>Login</Button>
           </Segment>
         </Form>
       </Grid.Column>
