@@ -10,7 +10,7 @@ const project =require('./routes/api/project');
 const learner =require('./routes/api/learner');
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+//app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 // Connect Database

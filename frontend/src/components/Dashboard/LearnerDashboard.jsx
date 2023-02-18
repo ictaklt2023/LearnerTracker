@@ -5,6 +5,7 @@ import Sidebar from '../Sidebar/Sidebar';
 import Topbar from '../Topbar/Topbar'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
+import { Pagination } from 'semantic-ui-react'
 
 const LearnerDashboard = () => {
   const navigate = useNavigate();
@@ -73,6 +74,7 @@ const LearnerDashboard = () => {
           })}
         </Table.Body>
       </Table>
+      {/* <Pagination defaultActivePage={1} totalPages={10} /> */}
     </Segment>
 </div>
     </div>

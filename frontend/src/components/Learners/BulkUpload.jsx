@@ -52,27 +52,36 @@ const BulkUpload = () => {
         });
     };
 
+    const hasDuplicate = (arrayObj, colName) => {
+        var hash = Object.create(null);
+        return arrayObj.some((arr) => {
+            return arr[colName] && (hash[arr[colName]] || !(hash[arr[colName]] = true));
+        });
+    };
+
     const sendDataToAPI = () => {
-        if(parsedData.length>0)
-        {
-        axios.post('http://localhost:8062/api/learner/bulkupload', parsedData)
-            .then((response) => {
-               if(response.data.status =='Failed')
-               {
-                alert(response.data.Message);
-               }
-               else if(response.data.status =='OK')
-               {
-                alert(response.data.Message);
-                navigate('/learner');
-               }
-            })
-            .catch(function (error) {
-                console.log(error.toJSON());
-              });
+        if (parsedData.length > 0) {
+            var isDuplicate = hasDuplicate(parsedData, "learnerId");
+            if (!isDuplicate) {
+                axios.post('http://localhost:8062/api/learner/bulkupload', parsedData)
+                    .then((response) => {
+                        if (response.data.status == 'Failed') {
+                            alert(response.data.Message);
+                        }
+                        else if (response.data.status == 'OK') {
+                            alert(response.data.Message);
+                            navigate('/learner');
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error.toJSON());
+                    });
+            }
+            else {
+                alert('Upload failed, LearnerId duplication found in uploaded file!');
+            }
         }
-        else
-        {
+        else {
             alert('No data found!');
         }
     }
